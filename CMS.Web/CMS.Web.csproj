@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 	    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
 	    <ApplicationIcon>favicon.ico</ApplicationIcon>
 	    <UserSecretsId>35074e52-dac8-44b4-bd29-9de876da3365</UserSecretsId>
