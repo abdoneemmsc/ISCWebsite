@@ -1,0 +1,131 @@
+﻿@{
+    var lang = ViewBag.lang;
+    ViewBag.IsHome = true;
+    if (lang == "en")
+    {
+        System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+    }
+    else
+    {
+        System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("ar-EG");
+        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ar-EG");
+    }
+}
+<!DOCTYPE html>
+<html lang="@lang" dir="@(lang=="en"?"ltr":"rtl")">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @Resource.Control_panel</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link href="~/lib/select2/dist/css/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap.datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/common.css" />
+    <link rel="stylesheet" href="~/css/cpanel.css" />
+    @if (lang != "en")
+    {
+        <link rel="stylesheet" href="~/css/common-rtl.css" />
+        <link rel="stylesheet" href="~/css/cpanel-rtl.css" />
+    }
+</head>
+<body>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">@Resource.Control_panel</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <partial name="_LoginPartial" />
+                        <ul class="navbar-nav flex-grow-1">
+                            @if ((await AuthorizationService.AuthorizeAsync(User, Policies.ManageWebsitePolicy)).Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Posts" asp-action="Index">@Resource.Content</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Contacts" asp-action="Index">@Resource.Vistors_messages</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Menu" asp-action="Index">@Resource.MainMenu</a>
+                                </li>
+                            }
+                            @if ((await AuthorizationService.AuthorizeAsync(User, Policies.ManageUsersPolicy)).Succeeded)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Users">@Resource.Users</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Roles">@Resource.Roles</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Permissions">@Resource.Permissions</a>
+                                </li>
+                            }
+                            @if ((await AuthorizationService.AuthorizeAsync(User, Policies.ManageWebsitePolicy)).Succeeded)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @Resource.Settings
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="dropdown-item" asp-controller="Settings" asp-action="Index">@Resource.GeneralSettings</a>
+                                        <a class="dropdown-item" asp-controller="Settings" asp-action="PostTypes">@Resource.PostTypes</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Home" asp-action="Index" asp-area="">@Resource.Website</a>
+                                </li>
+                                <li class="nav-item">
+                                    <button title="@Resource.Language" class="text-dark change-language btn btn-light">@(lang == "ar" ? "En" : "ع")</button>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+    }
+    <div class="container pt-2">
+        <main role="main" class="pb-3">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <ol class="breadcrumb">
+                    @RenderSection("breadcrumb", true)
+                </ol>
+            }
+            @RenderBody()
+        </main>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="text-center row">
+                <div class="col-4">
+
+                </div>
+                <div class="col-4">
+                    © @Resource.RaedAlnajahCo - @DateTime.Now.ToString("yyyy")
+                </div>
+                <div class="col-4">
+                    <span class="text-en">Developed by</span> <b><a class="text-en" href="https://isystemc.com/" target="_blank" style="letter-spacing:2px;">ISC</a></b>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/select2/dist/js/select2.min.js"></script>
+    <script src="~/lib/bootstrap.datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/lib/bootstrap.datepicker/dist/js/locales/bootstrap-datepicker.ar.min.js"></script>
+
+    <script src="~/js/cpanel.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

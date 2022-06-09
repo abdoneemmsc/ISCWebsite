@@ -1,0 +1,29 @@
+﻿@model FileUploaderViewModel
+
+@if (Model.IsUploaded)
+{
+    <a href="@Model.FileUrl" target="_blank">@Model.FileName</a>
+    <button type="button" data-field="@Model.FieldId" data-id="@Model.FileUrl" class="btn btn-danger btn-sm deleteFile">حذف</button>
+    <input type="hidden" name="@($"{Model.FieldId}.{nameof( Model.FileUrl)}")" asp-for="FileUrl" />
+    <input type="hidden" name="@($"{Model.FieldId}.{nameof( Model.FileName)}")" asp-for="FileName" />
+    <input type="hidden" name="@($"{Model.FieldId}.{nameof( Model.IsUploaded)}")" asp-for="IsUploaded" />
+}
+else
+{
+    if (Model.ErrorMessages.Any())
+    {
+        foreach (var item in Model.ErrorMessages)
+        {
+            <ul class="text-danger">
+                <li>
+                    @item
+                </li>
+            </ul>
+        }
+    }
+    <div class="custom-file">
+        <input accept=".png,.jpg,.jpeg,.gif, .pdf" type="file" class="custom-file-input fileUploader" id="@Model.FieldId" name="@Model.FieldId" data-val-required="@Resource.Please_upload_file." data-val="@(Model.IsRequired?"true":"false")">
+        @Html.ValidationMessage(Model.FieldId, "", new { @class = "text-danger" })
+        <label class="custom-file-label" for="@Model.FieldId">@Resource.Upload_files</label>
+    </div>
+}

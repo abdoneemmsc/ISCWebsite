@@ -1,0 +1,93 @@
+﻿@{
+    var lang = ViewBag.Lang;
+}
+@model SettingViewModel
+<footer id="footer">
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-4 col-md-6 footer-info">
+                    <img class="img-fluid" width="300" src="~/assets/img/white-logo@(ViewBag.lang=="en"?"-en":"").png" />
+
+                </div>
+
+                <div class="col-lg-4 col-md-6 footer-contact">
+                    <h4>@Resource.Social_Links</h4>
+                    <div class="social-links">
+                        @if (!string.IsNullOrWhiteSpace(Model?.Twitter))
+                        {
+                            <a target="_blank" href="https://twitter.com/@Model?.Twitter" class="twitter"><i class="fa fa-twitter"></i></a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model?.Facebook))
+                        {
+                            <a target="_blank" href="https://facebook.com/@Model?.Facebook" class="facebook"><i class="fa fa-facebook"></i></a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model?.Instagram))
+                        {
+                            <a target="_blank" href="https://instagram.com/@Model?.Instagram" class="instagram"><i class="fa fa-instagram"></i></a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model?.Youtube))
+                        {
+                            <a target="_blank" href="@Model?.Youtube" class="youtube"><i class="fa fa-youtube"></i></a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model?.Snapchat))
+                        {
+                            <a target="_blank" href="https://snapchat.com/add/@Model?.Snapchat" class="snapchat"><i class="fa fa-snapchat"></i></a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model?.Whatsapp))
+                        {
+                            <a target="_blank" href="https://wa.me/@Model?.Whatsapp" class="whatsapp"><i class="fa fa-whatsapp"></i></a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model?.Linkedin))
+                        {
+                            <a target="_blank" href="https://wa.me/@Model?.Whatsapp" class="linkedin"><i class="fa fa-linkedin"></i></a>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 footer-contact mb-0">
+                    <h4>@Resource.Contact_Us</h4>
+                    <p class="text-white">
+                        @(ViewBag.lang=="en"? Html.DisplayFor(a => a.AddressEn):Html.DisplayFor(a => a.Address))
+                    </p>
+                    <p class="m-0 text-white">
+                        <strong>@Resource.Phone:</strong>  @Html.DisplayFor(a => a.Phone)<br>
+                        <strong>@Resource.Email:</strong> @Html.DisplayFor(a => a.Email)<br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="copyright row">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="col-md">
+                    <a class="text-white" asp-action="index" asp-controller="home" asp-area="cpanel">@Resource.Control_panel</a>
+                </div>
+            }
+            else
+            {
+                <div class="col-md"></div>
+            }
+            <div class="col-md  pb-3">
+                © @Resource.RaedAlnajahCo - @DateTime.Now.ToString("yyyy")
+            </div>
+
+            <div class="col-md">
+                @if (lang == "en")
+                {
+                    <span class="text-en">Developed by</span>
+                }
+                <span><a class="text-white text-en" href="https://isystemc.com/" target="_blank" style="letter-spacing:2px;"><img width="20" src="~/assets/img/isc.png" /></a></span>
+                @if (lang != "en")
+                {
+                    <span class="text-en">Developed by</span>
+
+                }
+            </div>
+        </div>
+    </div>
+</footer><!-- End Footer -->

@@ -1,0 +1,50 @@
+﻿@model CMS.Web.ViewModels.UserViewModel
+
+@{
+    ViewData["Title"] = "حسابي";
+}
+@section breadcrumb{
+    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">@Resource.Home</a></li>
+}
+<h2>حسابي</h2>
+
+<div>
+    <hr />
+    <div class="row">
+
+        <div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UserName)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayFor(model => model.UserName)
+        </div>
+        <div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FullName)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayFor(model => model.FullName)
+        </div>
+        <div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </div>
+        <div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </div>
+        <div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.JobTitle)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayFor(model => model.JobTitle)
+        </div>
+    </div>
+</div>
+<br />
+<div>
+    @Html.ActionLink("تغيير كلمة السر", "ChangePassword", new { /* id = Model.PrimaryKey */ }, new { @class = "btn btn-info" })
+</div>

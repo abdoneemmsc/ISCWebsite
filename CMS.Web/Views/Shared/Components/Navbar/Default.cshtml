@@ -1,0 +1,188 @@
+﻿
+@model IEnumerable<MenuViewModel>
+@{
+    string lang = ViewBag.lang ?? "ar";
+    var Setting = ViewBag.Setting as SettingViewModel;
+}
+@functions{
+    public string addLanguageParamToLocalLink(string url)
+    {
+        string lang = ViewBag.lang ?? "ar";
+        if (url == "#")
+            return url;
+
+        if (Url.IsLocalUrl(url))
+        {
+            url = $"/{lang}/{url}".Replace("//", "/");
+            url = url.Replace("//", "/");
+        }
+
+        return url;
+    }
+}
+<!-- ======= Header ======= -->
+<header id="header" class="fixed-top @(ViewBag.IsHome==true?"header-transparent":"") ">
+    <div class="header-top_area d-none d-lg-block">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-xl-5 col-md-5 ">
+                    <div class="header_left ">
+                        <div class="">
+                            <nav>
+                                <ul class="Top_Nav">
+                                    
+                                    <li><a asp-action="Index" asp-controller="Contact">@Resource.Contact_Us</a></li>
+                                    
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-7 col-md-7">
+                    <div class="header_right d-flex justify-content-end">
+                        <div class="socail_links">
+                            <ul>
+
+                                @if (!string.IsNullOrWhiteSpace(Setting?.Twitter))
+                                {
+                                    <li>
+                                        <a rel="noopener noreferrer" target="_blank" href="https://twitter.com/@Setting?.Twitter" class="twitter"><i class="fa fa-twitter"></i></a>
+                                    </li>
+
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Setting?.Facebook))
+                                {
+                                    <li>
+                                        <a rel="noopener noreferrer" target="_blank" href="https://facebook.com/@Setting?.Facebook" class="facebook"><i class="fa fa-facebook"></i></a>
+                                    </li>
+
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Setting?.Instagram))
+                                {
+                                    <li>
+                                        <a rel="noopener noreferrer" target="_blank" href="https://instagram.com/@Setting?.Instagram" class="instagram"><i class="fa fa-instagram"></i></a>
+                                    </li>
+
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Setting?.Youtube))
+                                {
+                                    <li>
+
+
+                                        <a rel="noopener noreferrer" target="_blank" href="@Setting?.Youtube" class="youtube"><i class="fa fa-youtube"></i></a>
+                                    </li>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Setting?.Snapchat))
+                                {
+                                    <li>
+
+
+                                        <a rel="noopener noreferrer" target="_blank" href="https://snapchat.com/add/@Setting?.Snapchat" class="snapchat"><i class="fa fa-snapchat"></i></a>
+                                    </li>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Setting?.Whatsapp))
+                                {
+                                    <li>
+                                        <a rel="noopener noreferrer" target="_blank" href="https://wa.me/@Setting?.Whatsapp" class="whatsapp"><i class="fa fa-whatsapp"></i></a>
+                                    </li>
+
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Setting?.Linkedin))
+                                {
+                                    <li>
+                                        <a rel="noopener noreferrer" target="_blank" href="https://www.linkedin.com/in/@Setting?.Linkedin" class="linkedin"><i class="fa fa-linkedin"></i></a>
+                                    </li>
+
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container py-1">
+        <div class="row justify-content-center">
+            <div class="col-xl-11 d-flex align-items-center">
+                <h1 class="logo mr-auto">
+                    <a href="/@lang/Home">
+                        <span class="row">
+                            <span class="d-inline small">
+                                <img class="d-inline img-logo" src="~/assets/img/logo@(lang=="en"?"-en":"").png" />
+                            </span>
+                        </span>
+                    </a>
+                </h1>
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul>
+                        <li>
+                            <a href="/@lang/Home">
+                                @Resource.Home
+                            </a>
+                        </li>
+                        @foreach (var item in Model.Where(a => a.ParentId == null).OrderBy(a => a.Order).ThenByDescending(a => a.Id))
+                        {
+
+                            @if (item.Children.Any(a => a.ParentId == item.Id))
+                            {
+                                <li class="drop-down">
+                                    <a href="">@(lang=="en"? item.NameEn:item.Name)</a>
+                                    <ul>
+                                        @foreach (var item2 in item.Children.Where(a => a.ParentId == item.Id))
+                                        {
+                                            @if (item2.Children.Any(a => a.ParentId == item2.Id))
+                                            {
+                                                <li>
+                                                    <a href="">@(lang == "en" ? item2.NameEn : item2.Name)</a>
+                                                    <ul>
+                                                        @foreach (var item3 in item2.Children.Where(a => a.ParentId == item2.Id))
+                                                        {
+                                                            <li>
+                                                                <a href="@addLanguageParamToLocalLink(item3.Url)">@(lang == "en" ? item3.NameEn : item3.Name)</a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li><a href="@addLanguageParamToLocalLink(item2.Url)">@(lang=="en"? item2.NameEn:item2.Name)</a></li>
+
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+
+                                <li>
+                                    <a href="@addLanguageParamToLocalLink(item.Url)">@(lang=="en"? item.NameEn:item.Name)</a>
+                                </li>
+                            }
+                        }
+                        <li>
+                            <a href="#" title="@Resource.Language" class="change-language">
+                                @{
+                                    if (lang == "ar")
+                                    {
+                                        <font class="small text-en">English</font>
+                                    }
+                                    else
+                                    {
+                                        <font class="small text-ar">
+                                            عربي
+                                        </font>
+                                    }
+                                }
+                            </a>
+                        </li>
+                    </ul>
+                    <ul>
+                    </ul>
+                </nav><!-- .nav-menu -->
+            </div>
+        </div>
+
+    </div>
+</header><!-- End Header -->

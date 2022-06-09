@@ -1,0 +1,36 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Common;
+
+@model List<PermissionViewModel>
+@{
+    ViewBag.Title = "قائمة الصلاحيات";
+}
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@section breadcrumb{
+    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">@Resource.Home</a></li>
+}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>الصلاحية</th>
+            <th>الوصف</th>
+            <th>المجموعة</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.GroupName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<!-- output a paging control that lets the user navigation to the previous page, next page, etc -->

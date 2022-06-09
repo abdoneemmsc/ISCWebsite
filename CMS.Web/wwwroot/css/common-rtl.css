@@ -1,0 +1,128 @@
+﻿/*start rtl style*/
+body, html {
+    text-align: right;
+    direction: rtl;
+}
+
+.custom-control-label::before, .custom-control-label::after {
+    right: -1.5rem;
+}
+
+.form-control {
+    min-width: 130px;
+}
+
+.input-validation-error {
+    border-color: #ff0000;
+}
+
+.field-validation-error {
+    width: auto;
+    display: initial !important;
+}
+
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+    left: 3px;
+    right: auto;
+}
+
+.datepicker {
+    direction: rtl;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    padding-left: .5rem;
+}
+
+.modal-header .close {
+    padding: 1rem 1rem;
+    margin: -1rem auto -1rem -1rem;
+}
+
+.btn-group > .btn-group:not(:first-child) > .btn, .btn-group > .btn:not(:first-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+}
+
+.btn-group > .btn-group:not(:last-child) > .btn, .btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
+ul.dropdown-menu li {
+    text-align: right;
+}
+
+.mr-auto, .mx-auto {
+    margin-left: auto !important;
+    margin-right: 0px !important;
+}
+
+.dropdown-menu {
+    text-align: right;
+    right: 0;
+    left: auto;
+}
+
+.dropdown-toggle::after {
+    margin-right: .255em;
+}
+
+@media (max-width: 767.98px) {
+    .offcanvas-collapse {
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+    }
+
+        .offcanvas-collapse.open {
+            -webkit-transform: translateX(-1rem);
+            transform: translateX(-3rem); /* Account for horizontal padding on navbar */
+        }
+}
+@media (min-width: 992px) {
+    .dropdown-menu .dropdown-toggle:after {
+        border-top: .3em solid transparent;
+        border-left: 0;
+        border-bottom: .3em solid transparent;
+        border-right: .3em solid;
+    }
+
+    .dropdown-menu .dropdown-menu {
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    .dropdown-menu li {
+        position: relative;
+    }
+
+    .nav-item .submenu {
+        display: none;
+        position: absolute;
+        top: -7px;
+    }
+    .nav-item .submenu .second-level {
+        right: 100%;
+        left: auto;
+
+    }
+    .nav-item .submenu-left {
+        left: 100%;
+        right: auto;
+    }
+
+    .dropdown-menu > li:hover {
+        background-color: #f1f1f1
+    }
+
+        .dropdown-menu > li:hover > .submenu {
+            display: block;
+        }
+}
+.colored-hr {
+    margin-right: 30px;
+}

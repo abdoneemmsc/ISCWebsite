@@ -1,0 +1,36 @@
+﻿@model CMS.Web.ViewModels.ContactViewModel
+@section breadcrumb{
+    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">@Resource.Home</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index","Contacts")">@Resource.Vistors_messages</a></li>
+}
+<hr />
+<div class="row">
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="col-sm-10">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Email)
+    </div>
+    <div class="col-sm-10">
+        @Html.DisplayFor(model => model.Email)
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Phone)
+    </div>
+    <div class="col-sm-10">
+        @Html.DisplayFor(model => model.Phone)
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Message)
+    </div>
+    <div class="col-sm-10">
+        @Html.Raw(Model.Message)
+    </div>
+    <hr />
+    <div class="col-sm-2">
+        <a asp-action="Index" class="btn btn-light">@Resource.Back</a>
+    </div>
+</div>

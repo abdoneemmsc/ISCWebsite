@@ -1,0 +1,90 @@
+﻿@model CMS.Web.ViewModels.PostViewModel
+@section breadcrumb{
+    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">@Resource.Home</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index","Posts")">@Resource.Content</a></li>
+}
+<h4>@(ViewBag.lang=="en"? Model.TitleEn:Model.Title)</h4>
+<hr />
+<div class="row">
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.MainImageUrl)
+    </div>
+    <div class="col-sm-10">
+        <img src="@Model.MainImageUrl" max-width="500px" class="img-fluid" />
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.IconUrl)
+    </div>
+    <div class="col-sm-10">
+        <img src="@Model.IconUrl" max-width="500px" class="img-fluid" />
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Title)
+    </div>
+    <div class="col-sm-10">
+        @Html.DisplayFor(model => model.Title)
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.TitleEn)
+    </div>
+    <div class="col-sm-10">
+        @Html.DisplayFor(model => model.TitleEn)
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Body)
+    </div>
+    <div class="col-sm-10">
+        @Html.Raw(Model.Body)
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.BodyEn)
+    </div>
+    <div class="col-sm-10">
+        @Html.Raw(Model.BodyEn)
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.TypeId)
+    </div>
+    <div class="col-sm-10">
+        @(ViewBag.lang=="en"? Model.PostType.NameEn:Model.PostType.Name)
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.CreatedDate)
+    </div>
+    <div class="col-sm-10">
+        @Html.DisplayFor(model => model.CreatedDate)
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.UpdatedDate)
+    </div>
+    <div class="col-sm-10">
+        @Html.DisplayFor(model => model.UpdatedDate)
+    </div>
+    @*<div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Hits)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayFor(model => model.Hits)
+        </div>*@
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Published)
+    </div>
+    <div class="col-sm-10">
+        @Html.DisplayFor(model => model.Published)
+    </div>
+    <div class="col-sm-2">
+        @Html.DisplayNameFor(model => model.PostImages)
+    </div>
+    <hr />
+    <div class="col-sm-10">
+        @foreach (var item in Model.PostImages)
+        {
+            <img src="@item.ImageUrl" max-width="500px" class="img-fluid" />
+        }
+    </div>
+    <hr />
+    <div class="col-sm-2">
+        <a asp-action="Upsert" class="btn btn-primary" asp-route-id="@Model.Id">@Resource.Edit</a>
+        <a asp-action="Index" class="btn btn-light">@Resource.Back</a>
+    </div>
+</div>

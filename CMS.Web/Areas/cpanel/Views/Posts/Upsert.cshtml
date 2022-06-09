@@ -1,0 +1,229 @@
+﻿@model PostViewModel
+
+@{
+    ViewData["Title"] = Model?.Id > 0 ? Resource.Edit : Resource.Add;
+}
+@section breadcrumb{
+    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">@Resource.Home</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index","Posts")">@Resource.Content</a></li>
+}
+<h4>@ViewData["Title"]</h4>
+<hr />
+<div class="row">
+
+    <form asp-action="Upsert">
+        @await Html.PartialAsync("_AspValidationSummary")
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TypeId" class="control-label"></label> @Html.RequiredSign()
+                <select asp-for="TypeId" class="form-control" asp-items="@ViewBag.Types">
+                    <option value="">
+                        --@Resource.Select--
+                    </option>
+                </select>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label> @Html.RequiredSign()
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+
+            <div class="form-group">
+                <label asp-for="TitleEn" class="control-label"></label>
+                <input asp-for="TitleEn" class="form-control" />
+                <span asp-validation-for="TitleEn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+
+            <div class="form-group">
+                <label asp-for="Body" class="control-label"></label>
+                <textarea asp-for="Body" class="form-control w-100"></textarea>
+                <span asp-validation-for="Body" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+
+            <div class="form-group">
+                <label asp-for="BodyEn" class="control-label"></label>
+                <textarea asp-for="BodyEn" class="form-control w-100"></textarea>
+                <span asp-validation-for="BodyEn" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group pb-3">
+                <label asp-for="MainImageFile"></label>
+                <div class="file-wrapper w-100">
+                    @{await Html.RenderPartialAsync("FileUploader", Model.MainImageFile);}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="side-image-wrapper">
+                <div class="form-group pb-3">
+                    <label asp-for="IconFile"></label>
+                    <div class="file-wrapper w-100">
+                        @{await Html.RenderPartialAsync("FileUploader", Model.IconFile);}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group pb-3">
+                <label asp-for="PostImages"></label>
+                <div class="custom-file">
+                    <input accept=".png,.jpg,.jpeg,.gif, .pdf" type="file" class="custom-file-input" id="PostImageFiles" name="PostImageFiles" multiple>
+                    <label class="custom-file-label" for="PostImageFiles">@Resource.Upload_files</label>
+                    <div class="PostImages-wrapper">
+                        @{await Html.RenderPartialAsync("PostImages", Model.PostImages);}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group pr-4">
+            <div class="custom-control custom-checkbox">
+                <input asp-for="Published" class="custom-control-input" id="Published" />
+                <label class="custom-control-label" asp-for="Published"></label>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="@Resource.Save" class="btn btn-primary" />
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">@Resource.Delete</a>
+            <a asp-action="Index" class="btn btn-light">@Resource.Back</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function deleteImage(url,elem) {
+                $.ajax({
+                    url: "@Url.Action("DeleteImage")",
+                    data: { Url: url },
+                    type: "POST",
+                    success: function () {
+                        elem.closest(".img-wrapper").remove();
+                    },
+                    error: function (x) {
+                        alert(x.data);
+                    }
+                })
+        }
+        $(function () {
+            $(document).on("change", "#PostImageFiles", function (e) {
+                e.preventDefault();
+                var elem = $(this);
+                var files = this.files;
+                var formData = new FormData();
+
+                for (var i = 0; i != files.length; i++) {
+                    formData.append("files", files[i]);
+                }
+                var other_data = $(this).closest('form').serializeArray();
+                $.each(other_data, function (key, input) {
+                    formData.append(input.name, input.value);
+                });
+                $.ajax({
+                    url: "@Url.Action("UploadMultiFiles")",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        $(".PostImages-wrapper").html(data);
+                    },
+                    beforeSend: function () {
+                        $(".PostImages-wrapper").append("<span>@Resource.Loading__please_wait...</span>");
+                    },
+                    error: function (x) {
+                        alert(x.data);
+                    }
+                });
+
+            });
+            $(document).on('change', '.fileUploader', function (e) {
+                e.preventDefault();
+                var allowedFiles = ["png", "jpg", "jpeg", "gif"];
+                if (this.files[0].size > 10485760) {
+                    alert("@Resource.File_size_is_too_large");
+                    $(this).val('');
+                    $(this).focus();
+                    return false;
+                }
+                if ($.inArray(this.files[0].type.split("/")[1], allowedFiles) == -1) {
+                    alert("@Resource.This_type_of_file_is_not_allowed");
+                    $(this).val('');
+                    $(this).focus();
+                    return false;
+                }
+                var element = $(this);
+                var formData = new FormData();
+
+                formData.append("file", this.files[0]);
+                formData.append("FieldId", element.attr("id"));
+
+                $.ajax({
+                    url: "@Url.Action("UploadFiles")",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        element.closest(".file-wrapper").html(data);
+                    },
+                    beforeSend: function () {
+                        element.closest(".file-wrapper").append("<span>@Resource.Loading__please_wait...</span>");
+                    },
+                    error: function (x) {
+                        alert(x.data);
+                    }
+                });
+            });
+
+            $(document).on('click', '.deleteFile', function () {
+                var element = $(this);
+                var fileUrl = element.data("id");
+                var fieldId = element.data("field");
+                $.ajax({
+                    url: "@Url.Action("DeleteFile")",
+                    data: { FileUrl: fileUrl, FieldId: fieldId },
+                    type: "POST",
+                    success: function (data) {
+                        element.parent(".file-wrapper").html(data);
+                    },
+                    error: function (x) {
+                        alert(x.data);
+                    }
+                })
+            });
+        });
+    </script>
+    <script src="~/js/ckeditor/ckeditor.js"></script>
+    <script>
+        var editor_config = {
+            language: '@ViewBag.lang',
+            toolbarCanCollapse: true,
+            toolbarStartupExpanded : false,
+            height: 200,
+            allowedContent: true,
+            extraAllowedContent : 'span(*)'
+        };
+        CKEDITOR.replace('Body', editor_config);
+        CKEDITOR.replace('BodyEn', editor_config);
+    </script>
+
+}

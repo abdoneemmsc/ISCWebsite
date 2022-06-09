@@ -1,0 +1,26 @@
+﻿@model IEnumerable<MenuViewModel>
+@{
+    var lang = ViewBag.Lang;
+    ViewBag.Title = Resource.MainMenu;
+    List<MultilevelMenuHelper.MenuItem> menuItems = Model.Select(a => new MultilevelMenuHelper.MenuItem
+    {
+        HasChilds = a.HasChilds ?? false,
+        Id = a.Id,
+        Name = lang=="en"?a.NameEn: a.Name,
+        Order = a.Order,
+        IsExtended = a.IsExtended,
+        ParentId = a.ParentId ?? 0,
+        Url = Url.Action("Upsert", new { Id = a.Id }).ToString()
+    }).OrderBy(a => a.Order).ThenByDescending(a => a.Id).ToList();
+}
+@section breadcrumb{
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">@Resource.Home</a></li>
+}
+<div class="row">
+    <h2 class="col-8 col-sm-10">@Resource.MainMenu</h2>
+    <div class="col-4 col-sm-2"><a class="btn btn-outline-info btn-block" href="@Url.Action("Upsert")">@Resource.New</a></div>
+</div>
+<hr />
+<div class="container">
+    @Html.GetMultilevelMenu(menuItems, null, false, null, null, null)
+</div>

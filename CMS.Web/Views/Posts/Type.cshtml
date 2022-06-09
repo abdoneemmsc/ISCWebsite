@@ -1,0 +1,116 @@
+﻿@using System.Globalization
+@model IEnumerable<PostViewModel>
+@{
+    Layout = "_PostLayout";
+    var lang = ViewBag.lang;
+    ViewBag.sectionId = "";
+    if (Model?.FirstOrDefault()?.TypeId == (int)Constants.PostTypes.Services)
+    {
+        ViewBag.sectionId = "about";
+    }
+    if (Model?.FirstOrDefault()?.TypeId == (int)Constants.PostTypes.Products)
+    {
+        ViewBag.sectionId = "portfolio";
+    }
+    if (lang == "en")
+    {
+        System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+    }
+    else
+    {
+        System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("ar-EG");
+        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ar-EG");
+    }
+
+}
+@section breadcrumb{
+    <li><a href="@Url.Action("Index", "Home")">@Resource.Home</a></li>
+}
+<div class="row @(Model?.FirstOrDefault()?.TypeId==(int)Constants.PostTypes.Services?"about-cols":"")">
+    @{
+        var index = 0;
+        int counter = 100;
+        foreach (var item in Model)
+        {
+            var title = lang == "en" ? item.TitleEn : item.Title;
+            var body = (HtmlToText.ConvertHtml(lang == "en" ? item.BodyEn : item.Body)).Truncate(250);
+            item.MainImageUrl = string.IsNullOrWhiteSpace(item.MainImageUrl) ? item.IconUrl : item.MainImageUrl;
+
+            if (item.TypeId == (int)Constants.PostTypes.Products)
+            {
+                <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-aos="fade-up" data-aos-delay="@counter">
+                    <div class="portfolio-wrap">
+                        <figure>
+                            <img src="@(item.MainImageUrl ?? item.IconUrl)" alt="" class="w-100 h-100" style="object-fit:cover">
+                            <a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id" class="link-details" title="@Resource.MoreDetails"><i class="ion ion-android-open"></i></a>
+                        </figure>
+
+                        <div class="portfolio-info">
+                            <h4><a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id">@title</a></h4>
+                        </div>
+                    </div>
+                </div>
+
+            }
+            else if (item.TypeId == (int)Constants.PostTypes.Clients)
+            {
+
+                body = HtmlToText.ConvertHtml((lang == "en" ? item.BodyEn : item.Body)).Truncate(100);
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="@counter">
+                    <div class="about-col">
+                        <div class="img">
+                            <img src="@(item.MainImageUrl ?? item.IconUrl)" alt="" class="img-fluid">
+                            <div class="icon"><img src="@item.IconUrl" /></div>
+                        </div>
+                        <h2 class="title"><a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id">@title</a></h2>
+                        <p>
+                            @body
+                        </p>
+                    </div>
+                </div>
+
+            }
+
+            else if (item.TypeId == (int)Constants.PostTypes.About)
+            {
+                <div class="col-md-4 text-decoration-none my-3 text-center" data-aos="@(index % 2 == 0 ? "fade-up" : "fade-down")">
+                    <img style="max-height:200px;" src="@(string.IsNullOrWhiteSpace(item.MainImageUrl) ? "/css/img/logo.png" : item.MainImageUrl)" class="img-fluid" />
+                    <h3 class="m-3 color-primary">@title</h3>
+                </div>
+            }
+            else if (item.TypeId == (int)Constants.PostTypes.Blog)
+            {
+                <div class="col-md-6 box card border-0" data-aos="fade-up" data-aos-delay="@counter">
+                    <div class="card-horizontal">
+                        <div class="img-square-wrapper">
+                            <img style="height:75px;width:75px;object-fit:cover" src="@item.MainImageUrl" alt="Card image cap">
+                        </div>
+                        <div class="card-body px-2 pt-0">
+                            <a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id" class="card-title h5 color-primary ">@title</a>
+                            <p class="card-text pt-2 small m-0">@body.Truncate(100)<span class="text-secondary small d-inline float-right pt-1"><i class="fa fa-calendar"></i> <span>@(lang=="en"?item.CreatedDate.ToString("dd/MM/yyyy"): item.CreatedDate.ToString("yyyy/MM/dd")) @item.CreatedDate.ToShortTimeString()</span></span></p>
+
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            }
+            else 
+            {
+                <div class="col-md-3 text-decoration-none my-3" data-aos="@(index % 2 == 0 ? "fade-up" : "fade-down")">
+                    <a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id" class="card text-decoration-none" asp-route-title="@title.ToUrlSlug()">
+                        <div class="card-img-bottom" style='background-image: url("@(string.IsNullOrWhiteSpace(item.MainImageUrl??item.IconUrl) ? "/css/img/user-logo.jpg" : item.MainImageUrl)");background-repeat:no-repeat;background-position:center;background-size:cover;min-height:200px;'></div>
+                        <div class="card-body">
+                            <h4 class="m-3 color-primary">@title</h4>
+                            <p class="text-muted">@body</p>
+                        </div>
+                    </a>
+                </div>
+
+            }
+            index = index + 1;
+            counter = counter + 100;
+        }
+    }
+</div>
+

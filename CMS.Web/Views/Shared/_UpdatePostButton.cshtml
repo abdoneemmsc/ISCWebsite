@@ -1,0 +1,9 @@
+﻿
+@model int
+@{
+    var lang = ViewBag.lang;
+}
+@if ((await AuthorizationService.AuthorizeAsync(User, Policies.ManageWebsitePolicy)).Succeeded)
+{
+    <a class="btn btn-sm btn-secondary" asp-action="Upsert" asp-controller="Posts" asp-route-area="cpanel" asp-route-id="@Model" asp-route-culture="@lang">@Resource.Edit</a>
+}

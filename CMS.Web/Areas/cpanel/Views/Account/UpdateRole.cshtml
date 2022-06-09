@@ -1,0 +1,39 @@
+﻿@model RoleViewModel
+@{
+    ViewData["Title"] = "تعديل الدور";
+    var IsEditMode = !(string.IsNullOrWhiteSpace(Model?.Id));
+}
+@section breadcrumb{
+    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">@Resource.Home</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Roles","Account")">الأدوار</a></li>
+}
+<div class="row">
+    <div class="col-md-4">
+        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            <input asp-for="Id" type="hidden" />
+            <h4>تعديل </h4>
+            <hr />
+
+            @await Html.PartialAsync("_AspValidationSummary")
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="حفظ" class="btn btn-primary" />
+                <a asp-action="Roles" class="btn btn-light">رجوع</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial");
+}

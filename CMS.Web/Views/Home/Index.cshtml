@@ -1,0 +1,312 @@
+﻿@model HomePageViewModel
+@{
+    var lang = ViewBag.lang;
+    ViewBag.IsHome = true;
+    if (lang == "en")
+    {
+        System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+    }
+    else
+    {
+        System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("ar-EG");
+        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ar-EG");
+    }
+    int index = 0;
+    int counter = 100;
+}
+
+<!-- ======= Intro Section ======= -->
+@functions {
+    int getNewsDelayPeriod(int index)
+    {
+        if (index == 0)
+            return 100;
+        if (index == 1 || index == 3)
+            return 200;
+        if (index == 2 || index == 4)
+            return 300;
+
+        return 400;
+    }
+}
+@if (Model.Sliders.Any())
+{
+    index = 0;
+
+
+    <section id="intro">
+        <div class="intro-container">
+            <div id="introCarousel" class="carousel slide carousel--fade shadow" data-ride="carousel">
+                <div class="carousel-inner">
+                    @if (Model?.Sliders?.Count > 1)
+                    {
+                        <ol class="carousel-indicators"></ol>
+                    }
+
+                    @foreach (var item in Model.Sliders)
+                    {
+                        var body = HtmlToText.ConvertHtml((lang == "en" ? item.BodyEn : item.Body)).Truncate(100);
+                        <div class="h-100">
+                            <video style="width: 100%;
+          height: 100vh;
+          object-fit: cover;
+          z-index: -100;" autoplay="" muted="" loop="" id="myVideo">
+                                <source src="/uploads/vid.mp4" type="video/mp4">
+                                <img src="/Uploads/vid_Moment.jpg" style="width:100%;height:100vh;object-fit:cover">
+                            </video>
+                        </div>
+                        <div class="carousel-item @(index == 0 ? "active" : "") " style="background-image:none;">
+                            <div class="carousel-container">
+                                <div class="container">
+                                    <h2 class="animate__animated animate__fadeInDown">@(lang == "en" ? item.TitleEn : item.Title)</h2>
+                                    <p class="animate__animated animate__fadeInUp">@body</p>
+                                    <a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id" class="btn-get-started scrollto animate__animated animate__fadeInUp">@Resource.ReadMore</a>
+                                </div>
+                            </div>
+                        </div>
+                        index = index + 1;
+                    }
+                </div>
+
+
+                @if (Model?.Sliders?.Count > 1)
+                {
+                    <a class="carousel-control-prev" href="#introCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon ion-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+
+                    <a class="carousel-control-next" href="#introCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon ion-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                }
+            </div>
+
+        </div>
+    </section><!-- End Intro Section -->
+}
+<main id="main">
+    @if (Model.Features.Any())
+    {
+        <div class="features_area" style="top:60px;z-index:1000;">
+            <div class="container">
+                <div class="featuresscon">
+                    @foreach (var item in Model.Features.Select((x, i) => (x, i)))
+                    {
+                        var title = lang == "en" ? item.x.TitleEn : item.x.Title;
+                        var lastIndex = Model.Features.Count() - 1;
+                        <div class="featuressingle text-center" style="@(((item.i == 0 && lang == "ar") || ((item.i == lastIndex && lang == "en"))) ? "border-radius:0px 15px 15px 0px":"" ) @(((item.i == lastIndex && lang == "ar") || ((item.i == 0 && lang == "en")))?"border-radius:15px 0px 0px 15px":"")">
+                            <div class="single_feature text-center">
+                                <div class="icon">
+                                    <img src="@item.x.IconUrl" width="40">
+                                </div>
+                                <p>
+                                    @title
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.About != null)
+    {
+        index = 0;
+        counter = 0;
+        var title = lang == "en" ? Model.About.TitleEn : Model.About.Title;
+        var body = HtmlToText.ConvertHtml((lang == "en" ? Model.About.BodyEn : Model.About.Body)).Truncate(50);
+
+        <div class="about_area ">
+            <div class="container pt-5">
+                <div class="border_1px">
+                    <div class="row align-items-center">
+                        <div class="col-xl-7 col-md-7">
+                            <div class="about_info">
+                                <p class="text-center">
+                                    @Resource.WelcomeTo
+                                </p>
+                                <h1 class="text-center">
+                                    @title
+                                </h1>
+                                <div class="text-center">
+                                    @body
+                                </div>
+                                <div class="text-center" style="margin-top: 25px">
+                                    <a asp-action="Index" asp-controller="Posts" asp-route-Id="@Model.About.Id" class="btn_1 circle arrow" style="border-radius:25px">
+                                        @Resource.More
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ci ci--w2 cell--2of3 col-md-5 mx-auto" style="margin:50px">
+                            <div class="video-holder">
+                                <div class="image-holder">
+                                    <div class="image-holder--inner">
+
+                                        <img src="@Model.About.IconUrl" class="img-fluid rounded" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.Services.Any())
+    {
+        <div class="section_services features_area pt-5" style="background: #fff;padding: 25px 0;margin-top: 0">
+            <div class="container">
+                <div class="row" style="margin-bottom: 80px;">
+                    <div class="col-md-12 text-center">
+                        <h1 class="av-special-heading-tag text-center" itemprop="headline">
+                            @(lang == "en" ? Model.Services?.FirstOrDefault()?.PostType?.NameEn : Model.Services?.FirstOrDefault()?.PostType?.Name)
+                        </h1>
+                        <div class="divider white"></div>
+                    </div>
+                </div>
+                <div class="row  no-gutters">
+
+                    @foreach (var item in Model.Services)
+                    {
+                        var title = lang == "en" ? item.TitleEn : item.Title;
+                        var body = HtmlToText.ConvertHtml((lang == "en" ? item.BodyEn : item.Body)).Truncate(100);
+
+                        <div class="col-md-4">
+                            <div class="single_feature text-center service" style=" border-left: 1px solid gainsboro; ">
+                                <div class="icon service-icon-box" style="">
+                                    <img src="@item.IconUrl" height="45">
+                                </div>
+                                <h3 class="text-center service-heading" style="color: #084a79; font-size: 17px;font-weight:normal;line-height:1.8em">
+                                    @title
+                                </h3>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+    }
+    @if (Model.Products.Any())
+    {
+        <!-- ======= Products Section ======= -->
+        index = 0;
+        counter = 100;
+        <section id="portfolio" class="section-bg ">
+            <div class="container" data-aos="fade-up pt-5">
+                <div class="row" style="margin-bottom: 80px;">
+                    <div class="col-md-12 text-center">
+                        <h1 class="av-special-heading-tag text-center" itemprop="headline">
+                            @(lang == "en" ? Model.Products?.FirstOrDefault()?.PostType?.NameEn : Model.Products?.FirstOrDefault()?.PostType?.Name)
+                        </h1>
+                        <div class="divider white"></div>
+                    </div>
+                </div>
+                <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
+
+                    @{
+
+                        foreach (var item in Model.Products)
+                        {
+                            var title = lang == "en" ? item.TitleEn : item.Title;
+                            var body = HtmlToText.ConvertHtml((lang == "en" ? item.BodyEn : item.Body)).Truncate(100);
+                            <div class="col-lg-3 col-md-6 portfolio-item filter-app">
+                                <div class="portfolio-wrap">
+                                    <figure>
+                                        <img src="@(item.MainImageUrl ?? item.IconUrl)" alt="" class="w-100 h-100" style="object-fit:cover">
+                                        <a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id" class="link-details" title="@Resource.MoreDetails"><i class="ion ion-android-open"></i></a>
+                                    </figure>
+
+                                    <div class="portfolio-info">
+                                        <h4><a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id">@title</a></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a class="btn btn-outline-more animate__animated animate__fadeInUp" href="@Url.Action("Type","Posts",new { Id=(int)Constants.PostTypes.Products})">@Resource.More</a>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End Portfolio Section -->
+    }
+    @if (Model.OurClients.Any())
+    {
+        <!-- ======= Our Clients Section ======= -->
+        <section id="clients">
+            <div class="container" data-aos="zoom-in">
+                <div class="row" style="margin-bottom: 80px;">
+                    <div class="col-md-12 text-center">
+                        <h1 class="av-special-heading-tag text-center" itemprop="headline">
+                            @(lang == "en" ? Model.OurClients?.FirstOrDefault()?.PostType?.NameEn : Model.OurClients?.FirstOrDefault()?.PostType?.Name)
+                        </h1>
+                        <div class="divider white"></div>
+                    </div>
+                </div>
+                <div class="owl-carousel clients-carousel">
+                    @foreach (var item in Model.OurClients)
+                    {
+                        var title = lang == "en" ? item.TitleEn : item.Title;
+                        <img src="@(item.MainImageUrl ?? item.IconUrl)" title="@title" />
+                    }
+                </div>
+            </div>
+        </section><!-- End Our Clients Section -->
+    }
+    <div class="about_area about_area2" style=" padding-top: 12px; background-color: #077b96;">
+        <div class="container">
+            <div class="border_1px">
+                <div class="row align-items-center">
+                    <div class="col-md-12 about_info text-center">
+                        <img src="/assets/img/blogicon.svg" width="70">
+                        <p class="text-center" style="font-size: 24px; color: white;">@Resource.Blog</p>
+                        <h3 class="text-center" style="font-size: 47px; font-weight:normal">@Resource.LatestBlog</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.News.Any())
+    {
+        <div class="container py-5">
+            <div class="owl-carousel pt-4 owl-rtl owl-loaded owl-drag news-carousel">
+
+                @foreach (var item in Model.News)
+                {
+                    var title = lang == "en" ? item.TitleEn : item.Title;
+                    var body = HtmlToText.ConvertHtml((lang == "en" ? item.BodyEn : item.Body)).Truncate(100);
+                    <div class="item_6">
+                        <div class="blog-box">
+                            <div class="blog-image-block">
+                                <a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id">
+                                    <img loading="lazy" src="@(item.MainImageUrl ?? item.IconUrl)" alt="" class="img-fluid">
+                                </a>
+                            </div>
+                            <div class="blog-content">
+                                <h3 class="blog-title blog-title22 py-2 my-2"><a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id"><small>@title</small></a></h3>
+                                <div class="blogDetaills">
+                                    @body
+                                </div><br />
+                                <a asp-action="Index" asp-controller="Posts" asp-route-Id="@item.Id" class=" MOreeee2 gwla my-3">@Resource.More &gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    }
+</main>
+<script>
+
+</script>

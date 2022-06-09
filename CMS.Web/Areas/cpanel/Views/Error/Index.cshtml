@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewData["Title"] = "خطأ";
+}
+@section breadcrumb{
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">الرئيسية</a></li>
+}
+<h1>@ViewBag.ExceptionMessage</h1>
+

@@ -1,0 +1,88 @@
+﻿@model PostViewModel
+@{
+    Layout = "_PostLayout";
+    var lang = ViewBag.lang;
+    string title = lang == "en" ? Model.TitleEn : Model.Title;
+    var ModelType = lang == "en" ? Model.PostType.NameEn : Model.PostType.Name;
+    ViewBag.Title = title;
+    if (lang == "en")
+    {
+        System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+    }
+    else
+    {
+        System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("ar-EG");
+        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ar-EG");
+    }
+}
+<link href="~/lib/ekko-lightbox/ekko-lightbox@(lang=="en"?"":"-rtl").css" rel="stylesheet" />
+@section breadcrumb{
+    <li><a href="@Url.Action("Index", "Home")">@Resource.Home</a></li>
+    @if (!(Model.TypeId == (int)Constants.PostTypes.Page || Model.TypeId == (int)Constants.PostTypes.MainSlider))
+    {
+        <li>
+            <a asp-action="Type" asp-route-id="@Model.TypeId" asp-route-title="@(ModelType.ToUrlSlug())">@(ModelType)</a>
+        </li>
+    }
+}
+<section data-aos="fade-up">
+    <div class="row">
+        @if (Model?.TypeId == (int)Constants.PostTypes.Products)
+        {
+            <div class="text-secondary small text-right w-100 container"><i class="fa fa-calendar"></i> <span>@(lang=="en"?Model.CreatedDate.ToString("dd/MM/yyyy"): Model.CreatedDate.ToString("yyyy/MM/dd")) @Model.CreatedDate.ToShortTimeString()</span></div>
+        }
+
+
+        @if (string.IsNullOrWhiteSpace(Model?.IconUrl) || Model?.TypeId != (int)Constants.PostTypes.Services)
+        {
+            <div class="col-12">
+                @(lang=="en"?Html.Raw( Model.BodyEn):Html.Raw(Model.Body))
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model?.MainImageUrl))
+            {
+                <img @(Model.TypeId == (int)Constants.PostTypes.Services ? "style=width:200px" : "") src="@Model.MainImageUrl" class="img-fluid" />
+            }
+        }
+        else
+        {
+            <div class="col-md-8">
+                @(lang=="en"?Html.Raw( Model.BodyEn):Html.Raw(Model.Body))
+            </div>
+            <div class="col-md-4">
+                <img src="@Model.IconUrl" class="w-100 h-auto" />
+            </div>
+            <p>&nbsp;</p>
+            @if (!string.IsNullOrWhiteSpace(Model?.MainImageUrl))
+            {
+                <img src="@Model.MainImageUrl" class="w-100 h-auto" />
+            }
+        }
+
+    </div>
+    <br />
+    @if (Model.PostImages?.Any() == true)
+    {
+
+        <div class="row text-center">
+            @foreach (var item in Model.PostImages)
+            {
+                <a href="@item.ImageUrl" data-toggle="lightbox" data-gallery="gallery" class="col-lg-3 col-md-4 col-6  img-fluid img-thumbnail">
+                    <img src="@item.ImageUrl" class="img-fluid rounded">
+                </a>
+            }
+        </div>
+    }
+</section>
+
+@await Html.PartialAsync("_UpdatePostButton", Model.Id)
+<p>&nbsp;</p>
+@section scripts{
+    <script src="~/lib/ekko-lightbox/ekko-lightbox.min.js"></script>
+    <script>
+        $(document).on("click", '[data-toggle="lightbox"]', function (event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+    </script>
+}

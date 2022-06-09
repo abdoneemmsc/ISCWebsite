@@ -1,0 +1,34 @@
+﻿
+@model IEnumerable<MenuViewModel>
+@{
+    List<MultilevelMenuHelper.MenuItem> menuItems = Model.Select(a => new MultilevelMenuHelper.MenuItem
+    {
+        HasChilds = a.HasChilds ?? false,
+        Id = a.Id,
+        IsExtended = a.IsExtended,
+        Name = ViewBag.lang == "en" ? a.NameEn : a.Name,
+        Order = a.Order,
+        ParentId = a.ParentId ?? 0,
+        Url = a.Url,
+    }).OrderBy(a => a.Order).ThenByDescending(a => a.Id).ToList();
+}
+<div class="navbar-wrapper">
+    <div class="container">
+        <div class="row text-center">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="@Url.Action("Index","Home")">
+                    <img src="~/css/img/logo@(ViewBag.lang=="en"?"-en":"").png" />
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="main-navbar">
+                    @Html.GetMultilevelMenu(menuItems, null, true, null, null, null)
+                    <a href="#" title="@Resource.Language" class="nav-link text-dark change-language">@(ViewBag. lang=="ar"?"En":"ع")</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+

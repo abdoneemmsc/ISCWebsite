@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <Version>3.1.0</Version>
+    <Description>Data Access Layer for the Quick Application template</Description>
+    <Copyright>Copyright © 2019 www.abdoneem.com</Copyright>
+    <PackageProjectUrl>https://www.abdoneem.com/quickapp</PackageProjectUrl>
+    <Company>abdoneem</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\Customer.cs" />
+    <Compile Remove="Models\OrderDetail.cs" />
+    <Compile Remove="Models\OrderHistory.cs" />
+    <Compile Remove="Models\Product.cs" />
+    <Compile Remove="Models\ProductCategory.cs" />
+    <Compile Remove="Repositories\CustomerRepository.cs" />
+    <Compile Remove="Repositories\ProductRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CMS.Common\CMS.Common.csproj" />
+  </ItemGroup>
+
+</Project>

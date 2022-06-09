@@ -1,0 +1,169 @@
+﻿/*
+    first color #077b96
+    second color #454545
+
+*/
+.text-gray {
+    color: #aeaeae !important;
+}
+
+.bg-first {
+    background: #077b96 !important;
+}
+
+.text-first {
+    color: #077b96 !important;
+}
+
+.text-second {
+    color: #454545 !important;
+}
+
+.bg-second {
+    background: #454545 !important;
+}
+
+.panel-box {
+    border-radius: 20px;
+    box-shadow: #6c757d38 2px 2px 20px 0px;
+}
+
+.feature-item {
+    border-radius: 20px;
+    min-height: 270px;
+    background-color: #454545;
+    position: relative;
+    top: 0px;
+    transition: top 0.5s;
+}
+
+    .feature-item:hover {
+        top: -10px;
+    }
+
+.uk-card-title {
+    font-size: 1.25rem;
+    line-height: 1.4;
+}
+
+    .uk-card-title a {
+        color: #077b96 !important;
+    }
+
+.uk-dotnav > .uk-active > * {
+    background-color: rgba(213, 28, 4, 0.6);
+    border-color: transparent;
+}
+
+.uk-dotnav > * > :active {
+    background-color: rgba(213, 28, 4,.2);
+}
+
+.uk-dotnav > * > :focus, .uk-dotnav > * > :hover {
+    background-color: rgba(213, 28, 4, 0.6);
+}
+
+.uk-slider-nav li > a {
+    width: 25px;
+    border-radius: 0;
+    height: 2px;
+}
+
+.client-label {
+    background: rgba(69, 69, 69, 0.80);
+}
+
+#homepage-map iframe {
+    width: 100%;
+    height: 350px;
+}
+
+.breadcrumb-wrapper {
+    padding-top: 100px;
+    background-color: red;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0.80);
+    color: white;
+    background-size: cover;
+    background-position-y: bottom;
+}
+
+.breadcrumb {
+    background: none;
+}
+
+.post-wrapper {
+}
+
+main {
+    min-height: 50vh;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: white;
+}
+
+.btn-outline-primary {
+    color: #077b96;
+    border-color: #077b96;
+    border-top-color: rgb(38, 132, 210);
+    border-right-color: rgb(38, 132, 210);
+    border-bottom-color: rgb(38, 132, 210);
+    border-left-color: rgb(38, 132, 210);
+}
+
+    .btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show > .btn-outline-primary.dropdown-toggle {
+        background-color: #077b96;
+        border-color: #077b96;
+        border-top-color: rgb(38, 132, 210);
+        border-right-color: rgb(38, 132, 210);
+        border-bottom-color: rgb(38, 132, 210);
+        border-left-color: rgb(38, 132, 210);
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #077b96;
+        border-color: #077b96;
+    }
+
+.main-slider {
+    margin-top: 80px;
+}
+
+    .main-slider .mask {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #00000085;
+        z-index: 1;
+    }
+
+.main-slider-body {
+    position: relative;
+    z-index: 2;
+}
+
+.nav-item .dropdown-menu {
+    /*    top:35px !important;
+*/ border: none;
+}
+
+.navbar-brand img {
+    max-width: 250px;
+    height: auto;
+}
+
+.dropdown > .dropdown-menu {
+    top: 200%;
+    transition: 0.3s all ease-in-out;
+}
+
+.dropdown:hover > .dropdown-menu {
+    display: block;
+    top: 30px;
+}
+
+.dropdown > .dropdown-toggle:active {
+    /*Without this, clicking will make it sticky*/
+    pointer-events: none;
+}

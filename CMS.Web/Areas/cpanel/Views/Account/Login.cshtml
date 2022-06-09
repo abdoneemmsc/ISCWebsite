@@ -1,0 +1,59 @@
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = Resource.SignIn;
+
+    var lang = ViewBag.lang;
+}
+@if (lang == "en")
+{
+    <a href="@Url.Action("Login",null,new { culture="ar"})">عربي</a>
+}
+else
+{
+    <a class="" href="@Url.Action("Login",null,new { culture="en"})">English</a>
+}
+<a class="float-@(lang=="en"?"right":"left")" href="/@lang/" >@Resource.Website</a>
+<div class="container">
+    <div class="row" style="height:90vh;">
+        <div class="col-md-4 offset-md-4 m-auto p-0">
+            <div class="card">
+                <div class="card-header">
+                    @Resource.SignIn
+                </div>
+                <div class="card-body">
+                    <section>
+                        <form id="account" method="post">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Username"></label>
+                                <input asp-for="Username" class="form-control" />
+                                <span asp-validation-for="Username" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Password"></label>
+                                <input asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group pr-4">
+                                <div class="custom-control custom-checkbox">
+                                    <input asp-for="RememberMe" class="custom-control-input" id="RememberMe" />
+                                    <label class="custom-control-label" asp-for="RememberMe"></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">@Resource.Login</button>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
